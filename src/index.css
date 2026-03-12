@@ -12,6 +12,7 @@ body {
   color: #ffffff;
   font-family: "Space Grotesk", sans-serif;
   overflow-x: hidden;
+  cursor: none; /* Hide default cursor for custom follower */
 }
 
 /* Terminal Input Cursor */
@@ -41,4 +42,66 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Noise Jitter Animation */
+@keyframes noise-jitter {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+  100% { transform: translate(5%, 0); }
+}
+
+.noise-overlay {
+  animation: noise-jitter 0.2s infinite;
+  opacity: 0.04;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 0.2s, height 0.2s, filter 0.2s;
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor.hovering-3d {
+  width: 64px;
+  height: 64px;
+  filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Glassmorphism Gradient Border */
+.glass-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  margin: -1px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
 }

@@ -45,7 +45,7 @@ export const Cards = () => {
             <div className="mb-6 text-white/70 group-hover:text-white transition-colors">
               {service.icon}
             </div>
-            <h3 className="mb-3 text-lg font-bold tracking-tight text-white">
+            <h3 className="mb-3 text-lg font-bold tracking-tighter text-white">
               {service.title}
             </h3>
             <p className="text-sm font-mono text-white/40 leading-relaxed">

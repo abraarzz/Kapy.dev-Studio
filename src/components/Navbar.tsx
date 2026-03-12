@@ -1,16 +1,25 @@
-import { motion } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 
 export const Navbar = () => {
+  const { scrollY } = useScroll();
+  
+  const paddingY = useTransform(scrollY, [0, 100], ["1rem", "0.5rem"]);
+  const logoScale = useTransform(scrollY, [0, 100], [1, 0.85]);
+
   return (
     <motion.nav 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#050505]/50 backdrop-blur-md"
+      style={{ paddingTop: paddingY, paddingBottom: paddingY }}
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 border-b border-white/10 bg-[#050505]/50 backdrop-blur-md"
     >
-      <div className="text-xl font-bold tracking-tighter text-white">
+      <motion.div 
+        style={{ scale: logoScale, transformOrigin: "left center" }}
+        className="text-xl font-bold tracking-tighter text-white"
+      >
         KAPY<span className="text-white/50">.DEV</span>
-      </div>
+      </motion.div>
       <motion.button 
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

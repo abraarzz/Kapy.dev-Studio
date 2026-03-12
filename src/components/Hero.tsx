@@ -16,12 +16,23 @@ export const Hero = () => {
   }, []);
 
   const handleScroll = () => {
-    const section = document.getElementById('process-section');
-    section?.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById('process-section');
+    if (element) {
+      const offset = 100; // Account for the new gap you wanted
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
-    <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-20 overflow-hidden">
+    <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-32 overflow-hidden">
       {/* 3D Emblem Container */}
       <motion.div 
         className="relative flex items-center justify-center w-64 h-64 mb-12 md:w-80 md:h-80"
@@ -50,7 +61,7 @@ export const Hero = () => {
         
         {/* Capybara Stone Sculpt */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative flex items-center justify-center overflow-hidden rounded-full w-36 h-36 md:w-44 md:h-44 bg-zinc-900 border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+          <div className="relative flex items-center justify-center overflow-hidden rounded-full w-36 h-36 md:w-44 md:h-44 bg-zinc-900 border border-white/10 shadow-[inset_0_0_20px_rgba(255,255,255,0.2),0_0_30px_rgba(255,255,255,0.1)]">
              {/* Stone Texture Overlay */}
              <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
              
@@ -65,8 +76,9 @@ export const Hero = () => {
                 <path d="M 35 25 C 30 20, 25 25, 30 30" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
              </svg>
              
-             {/* Lighting gradient */}
-             <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-white/20 mix-blend-overlay"></div>
+             {/* Lighting gradient (Key Light / Subsurface Scattering simulation) */}
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4)_0%,transparent_60%)] mix-blend-overlay"></div>
+             <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-white/10 mix-blend-overlay"></div>
           </div>
         </div>
       </motion.div>
@@ -78,13 +90,13 @@ export const Hero = () => {
         transition={{ duration: 0.8, delay: 0.2 }}
         className="text-center"
       >
-        <div className="inline-block px-3 py-1 mb-6 text-xs tracking-widest uppercase border rounded-full font-mono text-white/60 border-white/10 bg-white/5 backdrop-blur-sm">
+        <div className="inline-block px-3 py-1 mb-6 text-xs tracking-widest uppercase border rounded-full font-mono text-white/70 border-white/10 bg-white/5 backdrop-blur-sm">
           System Initialized // v2.0.4
         </div>
         <h1 className="mb-6 text-5xl font-bold tracking-tighter text-transparent md:text-7xl lg:text-8xl bg-clip-text bg-gradient-to-b from-white to-white/40">
           Kapy.dev Studio
         </h1>
-        <p className="max-w-2xl mx-auto mb-10 text-sm leading-relaxed md:text-base font-mono text-white/50">
+        <p className="max-w-2xl mx-auto mb-10 text-sm leading-relaxed md:text-base font-mono text-white/70">
           ENGINEERING IMMERSIVE DIGITAL EXPERIENCES. <br className="hidden md:block"/>
           WE BUILD HIGH-PERFORMANCE SAAS, AI INTEGRATIONS, AND CYBER-AESTHETIC WEB PLATFORMS.
         </p>
@@ -108,6 +120,9 @@ export const Hero = () => {
           </span>
           <div className="absolute inset-0 transition-opacity opacity-50 blur-md bg-white rounded-full group-hover:opacity-100"></div>
         </motion.button>
+        
+        {/* The Hero Buffer */}
+        <div className="h-[15vh]"></div>
       </motion.div>
     </div>
   );
