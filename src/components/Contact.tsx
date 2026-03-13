@@ -5,6 +5,8 @@ import { useState } from 'react';
 export const Contact = () => {
   const [formState, setFormState] = useState<'idle' | 'streaming' | 'success'>('idle');
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [pulseColor, setPulseColor] = useState<string | null>(null);
+  const [service, setService] = useState<'web' | 'app' | 'osint'>('web');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,61 +17,103 @@ export const Contact = () => {
     }, 2000);
   };
 
+  const triggerPulse = (color: string) => {
+    setPulseColor(color);
+    setTimeout(() => setPulseColor(null), 1000);
+  };
+
   return (
-    <section className="relative z-10 py-48 bg-[#050505]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="relative z-10 py-48 bg-[#050505] overflow-hidden">
+      {/* Background Pulse Overlay */}
+      <motion.div 
+        className="absolute inset-0 z-0 pointer-events-none mix-blend-screen"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: pulseColor ? 0.3 : 0, backgroundColor: pulseColor || 'transparent' }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      />
+      
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="mb-20 text-center">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">Neural-Link</h2>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4 font-heading">Neural-Link</h2>
           <p className="font-mono text-white/70">ESTABLISH A DIRECT CONNECTION TO THE STUDIO.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Command Center Form */}
-          <div className="p-8 glass-card rounded-2xl relative overflow-hidden">
+          <div className="p-8 glass-card rounded-2xl relative overflow-hidden backdrop-blur-[30px] bg-white/[0.02]">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-            <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+            <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 font-subheading">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
               Initialize Project
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-6 font-mono text-sm">
-              <div>
-                <label className={`block mb-2 uppercase text-xs tracking-widest transition-colors ${focusedField === 'name' ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'text-white/60'}`}>Entity Name</label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="flex flex-col">
+                <label className="block mb-2 uppercase text-[10px] tracking-widest font-heading opacity-60 text-white text-left">ENTITY_NAME</label>
                   <input 
                   type="text" 
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
-                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white/50 focus:bg-white/5 transition-colors focus:text-[#64D2FF] focus:drop-shadow-[0_0_8px_rgba(100,210,255,0.5)]" 
+                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white font-mono text-sm focus:outline-none focus:border-white focus:bg-white/5 transition-all focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]" 
                   placeholder="Enter your name or company..." 
                   required
                 />
               </div>
-              <div>
-                <label className={`block mb-2 uppercase text-xs tracking-widest transition-colors ${focusedField === 'email' ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'text-white/60'}`}>Comms Link</label>
+              <div className="flex flex-col">
+                <label className="block mb-2 uppercase text-[10px] tracking-widest font-heading opacity-60 text-white text-left">COMMS_LINK</label>
                 <input 
-                  type="email" 
+                  type="text" 
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white/50 focus:bg-white/5 transition-colors focus:text-[#64D2FF] focus:drop-shadow-[0_0_8px_rgba(100,210,255,0.5)]" 
-                  placeholder="Email address..." 
+                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white font-mono text-sm focus:outline-none focus:border-white focus:bg-white/5 transition-all focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]" 
+                  placeholder="Email or Phone Number..." 
                   required
                 />
               </div>
-              <div>
-                <label className={`block mb-2 uppercase text-xs tracking-widest transition-colors ${focusedField === 'data' ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'text-white/60'}`}>Transmission Data</label>
+              
+              <div className="flex flex-col">
+                <label className="block mb-2 uppercase text-[10px] tracking-widest font-heading opacity-60 text-white text-left">SERVICE_SELECTION</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setService('web')}
+                    className={`py-3 px-2 rounded-lg border text-xs font-mono transition-all ${service === 'web' ? 'border-[#007AFF] bg-[#007AFF]/10 text-[#007AFF] shadow-[0_0_15px_rgba(0,122,255,0.3)]' : 'border-white/10 bg-black/50 text-white/50 hover:border-white/30'}`}
+                  >
+                    Web_Development
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setService('app')}
+                    className={`py-3 px-2 rounded-lg border text-xs font-mono transition-all ${service === 'app' ? 'border-[#AF52DE] bg-[#AF52DE]/10 text-[#AF52DE] shadow-[0_0_15px_rgba(175,82,222,0.3)]' : 'border-white/10 bg-black/50 text-white/50 hover:border-white/30'}`}
+                  >
+                    App_Development
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setService('osint')}
+                    className={`py-3 px-2 rounded-lg border text-xs font-mono transition-all ${service === 'osint' ? 'border-white bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'border-white/10 bg-black/50 text-white/50 hover:border-white/30'}`}
+                  >
+                    OSINT_Services
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="block mb-2 uppercase text-[10px] tracking-widest font-heading opacity-60 text-white text-left">TRANSMISSION_DATA</label>
                 <textarea 
                   rows={4} 
                   onFocus={() => setFocusedField('data')}
                   onBlur={() => setFocusedField(null)}
-                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white/50 focus:bg-white/5 transition-colors resize-none focus:text-[#64D2FF] focus:drop-shadow-[0_0_8px_rgba(100,210,255,0.5)]" 
-                  placeholder="Describe your objective..."
+                  className="terminal-input w-full bg-black/50 border border-white/10 rounded-lg p-4 text-white font-mono text-sm focus:outline-none focus:border-white focus:bg-white/5 transition-all resize-y focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]" 
+                  placeholder="Describe your project objectives and vision..."
                   required
                 ></textarea>
               </div>
               
               <div className="pt-2">
                 {formState === 'idle' && (
-                  <button type="submit" className="w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-lg hover:bg-white/90 transition-colors cursor-pointer">
-                    Transmit Data
+                  <button type="submit" className="relative w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-lg transition-all cursor-pointer overflow-hidden group">
+                    <span className="relative z-10 font-heading">Transmit Data</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
                   </button>
                 )}
                 
@@ -81,16 +125,21 @@ export const Contact = () => {
                       animate={{ width: "100%" }}
                       transition={{ duration: 2, ease: "linear" }}
                     />
-                    <div className="relative z-10 text-center text-white font-bold uppercase tracking-widest text-xs">
-                      Streaming Data...
+                    <div className="relative z-10 text-center text-white font-bold uppercase tracking-widest text-xs font-heading">
+                      System Processing...
                     </div>
                   </div>
                 )}
 
                 {formState === 'success' && (
-                  <div className="w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-2">
-                    <CheckCircle2 className="w-5 h-5" />
-                    Transmission Received
+                  <div className="w-full py-4 bg-white text-black font-bold uppercase tracking-widest rounded-lg flex flex-col items-center justify-center gap-1 font-mono">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5" />
+                      [SUCCESS] CONNECTION_ESTABLISHED
+                    </div>
+                    <div className="text-[10px] opacity-70">
+                      // WE WILL REACH OUT SHORTLY
+                    </div>
                   </div>
                 )}
               </div>
@@ -109,7 +158,7 @@ export const Contact = () => {
                 <div className="flex-1">
                   <h4 className="text-xl font-bold mb-1">Discord Terminal</h4>
                   <p className="font-mono text-white/50 text-xs mb-4">ssh join@discord.kapy.dev</p>
-                  <a href="https://discord.gg/K2hbt2Kwar" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/10 hover:bg-[#5865F2] border border-white/20 hover:border-[#5865F2] text-white text-sm font-bold uppercase tracking-wider rounded transition-colors">
+                  <a href="https://discord.gg/K2hbt2Kwar" target="_blank" rel="noopener noreferrer" onClick={(e) => { e.preventDefault(); triggerPulse('#5865F2'); setTimeout(() => window.open("https://discord.gg/K2hbt2Kwar", "_blank"), 500); }} className="inline-block px-6 py-2 bg-white/10 hover:bg-[#5865F2] border border-white/20 hover:border-[#5865F2] text-white text-sm font-bold uppercase tracking-wider rounded transition-colors">
                     Join the Studio
                   </a>
                 </div>
@@ -132,7 +181,7 @@ export const Contact = () => {
                     </span>
                   </h4>
                   <p className="font-mono text-white/50 text-xs mb-4">Direct Secure Line: +91 69010 65636</p>
-                  <a href="https://wa.me/916901065636" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-white/10 hover:bg-[#25D366] border border-white/20 hover:border-[#25D366] text-white text-sm font-bold uppercase tracking-wider rounded transition-colors">
+                  <a href="https://wa.me/916901065636" target="_blank" rel="noopener noreferrer" onClick={(e) => { e.preventDefault(); triggerPulse('#25D366'); setTimeout(() => window.open("https://wa.me/916901065636", "_blank"), 500); }} className="inline-block px-6 py-2 bg-white/10 hover:bg-[#25D366] border border-white/20 hover:border-[#25D366] text-white text-sm font-bold uppercase tracking-wider rounded transition-colors">
                     Start Chat
                   </a>
                 </div>

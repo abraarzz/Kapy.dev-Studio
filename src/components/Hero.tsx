@@ -16,7 +16,7 @@ export const Hero = () => {
   }, []);
 
   const handleScroll = () => {
-    const element = document.getElementById('process-section');
+    const element = document.getElementById('the-process');
     if (element) {
       const offset = 100; // Account for the new gap you wanted
       const bodyRect = document.body.getBoundingClientRect().top;
@@ -93,7 +93,7 @@ export const Hero = () => {
         <div className="inline-block px-3 py-1 mb-6 text-xs tracking-widest uppercase border rounded-full font-mono text-white/70 border-white/10 bg-white/5 backdrop-blur-sm">
           System Initialized // v2.0.4
         </div>
-        <h1 className="mb-6 text-5xl font-bold tracking-tighter text-transparent md:text-7xl lg:text-8xl bg-clip-text bg-gradient-to-b from-white to-white/40">
+        <h1 className="mb-6 text-5xl font-bold tracking-tighter text-transparent md:text-7xl lg:text-8xl bg-clip-text bg-gradient-to-b from-white to-white/40 font-heading">
           Kapy.dev Studio
         </h1>
         <p className="max-w-2xl mx-auto mb-10 text-sm leading-relaxed md:text-base font-mono text-white/70">
@@ -104,7 +104,7 @@ export const Hero = () => {
         {/* CTA Button */}
         <motion.button 
           onClick={handleScroll}
-          whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,255,255,0.4)" }}
+          whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,255,102,0.4), inset 0 0 10px rgba(0,229,255,0.2)" }}
           whileTap={{ scale: 0.95 }}
           className="relative px-8 py-4 text-sm font-bold tracking-wide text-black uppercase transition-all bg-white rounded-full cursor-pointer group"
         >
@@ -118,11 +118,11 @@ export const Hero = () => {
               ↗
             </motion.span>
           </span>
-          <div className="absolute inset-0 transition-opacity opacity-50 blur-md bg-white rounded-full group-hover:opacity-100"></div>
+          <div className="absolute inset-0 transition-opacity opacity-50 blur-md bg-gradient-to-r from-[#00FF66] to-[#00E5FF] rounded-full group-hover:opacity-100"></div>
         </motion.button>
         
         {/* The Hero Buffer */}
-        <div className="h-[15vh]"></div>
+        <div className="h-[25vh]"></div>
       </motion.div>
     </div>
   );
